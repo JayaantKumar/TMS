@@ -1,0 +1,188 @@
+### Railway Backend API Examples
+### Use with REST Client extension in VS Code or similar tools
+### Replace {{baseUrl}} and {{token}} with your actual values
+
+@baseUrl = http://localhost:5000/api
+@token = your_jwt_token_here
+
+### Health Check
+GET {{baseUrl}}/health
+
+###
+
+### Register New User
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "test@example.com",
+  "password": "SecurePass123",
+  "firstName": "Test",
+  "lastName": "User"
+}
+
+###
+
+### Login User
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "test@example.com",
+  "password": "SecurePass123"
+}
+
+###
+
+### Get Current User Profile
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+###
+
+### Update User Profile
+PUT {{baseUrl}}/auth/update-profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "firstName": "Updated",
+  "lastName": "Name",
+  "username": "updateduser"
+}
+
+###
+
+### Change Password
+PUT {{baseUrl}}/auth/change-password
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "currentPassword": "SecurePass123",
+  "newPassword": "NewSecurePass456"
+}
+
+###
+
+### Get All Users (Admin Only)
+GET {{baseUrl}}/users?page=1&limit=10&search=test
+Authorization: Bearer {{token}}
+
+###
+
+### Get User by ID
+GET {{baseUrl}}/users/USER_ID_HERE
+Authorization: Bearer {{token}}
+
+###
+
+### Update User Status (Admin Only)
+PUT {{baseUrl}}/users/USER_ID_HERE/status?isActive=false
+Authorization: Bearer {{token}}
+
+###
+
+### Update User Role (Admin Only)
+PUT {{baseUrl}}/users/USER_ID_HERE/role?role=admin
+Authorization: Bearer {{token}}
+
+###
+
+### Delete User (Admin Only)
+DELETE {{baseUrl}}/users/USER_ID_HERE
+Authorization: Bearer {{token}}
+
+###
+
+### Get User Statistics (Admin Only)
+GET {{baseUrl}}/users/stats/overview
+Authorization: Bearer {{token}}
+
+###
+
+### Upload Profile Picture
+POST {{baseUrl}}/upload/profile-picture
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
+
+------WebKitFormBoundary
+Content-Disposition: form-data; name="profilePicture"; filename="profile.jpg"
+Content-Type: image/jpeg
+
+ ./path/to/your/image.jpg
+------WebKitFormBoundary--
+
+###
+
+### Upload Multiple Files
+POST {{baseUrl}}/upload/files
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
+
+------WebKitFormBoundary
+Content-Disposition: form-data; name="files"; filename="document1.pdf"
+Content-Type: application/pdf
+
+< ./path/to/document1.pdf
+------WebKitFormBoundary
+Content-Disposition: form-data; name="files"; filename="image1.jpg"
+Content-Type: image/jpeg
+
+< ./path/to/image1.jpg
+------WebKitFormBoundary--
+
+###
+
+### Get File Information
+GET {{baseUrl}}/upload/info/FILENAME_HERE
+Authorization: Bearer {{token}}
+
+###
+
+### Delete Profile Picture
+DELETE {{baseUrl}}/upload/profile-picture
+Authorization: Bearer {{token}}
+
+###
+
+### Delete Specific File
+DELETE {{baseUrl}}/upload/file/FILENAME_HERE
+Authorization: Bearer {{token}}
+
+###
+
+### Error Examples
+
+### Invalid Registration (Missing Fields)
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "test",
+  "email": "invalid-email"
+}
+
+###
+
+### Invalid Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "nonexistent@example.com",
+  "password": "wrongpassword"
+}
+
+###
+
+### Unauthorized Request (No Token)
+GET {{baseUrl}}/auth/me
+
+###
+
+### Forbidden Request (User trying to access admin endpoint)
+GET {{baseUrl}}/users
+
+###
